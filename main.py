@@ -3,7 +3,6 @@ from PIL import Image
 import requests
 import torch 
 import torchvision 
-import tourchaudio
 from transformers import AutoProcessor, BlipForConditionalGeneration
 
 # Function to generate captions
