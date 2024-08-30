@@ -1,16 +1,16 @@
 import streamlit as st
 from PIL import Image
 import requests
-import torch 
-import torchvision 
 from transformers import AutoProcessor, BlipForConditionalGeneration
 
-# Function to generate captions
-def generate_caption(image=None, image_url=None, model_name="Salesforce/blip-image-captioning-base"):
-    """Generates a caption using BLiP for a given image or image URL."""
-    processor = AutoProcessor.from_pretrained(model_name)
-    model = BlipForConditionalGeneration.from_pretrained(model_name)
+# Load model and processor once
+model_name = "Salesforce/blip-image-captioning-base"
+processor = AutoProcessor.from_pretrained(model_name)
+model = BlipForConditionalGeneration.from_pretrained(model_name)
 
+# Function to generate captions
+def generate_caption(image=None, image_url=None):
+    """Generates a caption using BLiP for a given image or image URL."""
     # Fetch and process image
     if image_url:
         try:
@@ -39,7 +39,7 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-image: url('https://images.pexels.com/photos/5685274/pexels-photo-5685274.jpeg');
+        background-image: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0');
         background-size: cover;
     }
     </style>
@@ -50,8 +50,12 @@ st.markdown(
 st.title("Image Captioning with BLiP by Yaqoob Khan ALyani")
 st.write("Upload an image or enter a URL to generate a caption.")
 
-# File uploader for image input
-uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+# Sidebar for better user experience
+st.sidebar.title("Options")
+uploaded_image = st.sidebar.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+image_url = st.sidebar.text_input("Enter image URL (optional)")
+
+# Process uploaded image
 if uploaded_image is not None:
     try:
         image = Image.open(uploaded_image)
@@ -61,11 +65,11 @@ if uploaded_image is not None:
     except Exception as e:
         st.error(f"Error processing image: {e}")
 
-# URL input for image fetching
-image_url = st.text_input("Enter image URL (optional)")
+# Process image URL
 if image_url:
     caption = generate_caption(image_url=image_url)
     if caption:
         st.success(f"Caption: {caption}")
     else:
         st.warning("Image not found or caption generation failed.")
+    
