@@ -23,7 +23,7 @@ def generate_caption(image_url, model_name="Salesforce/blip-image-captioning-bas
     caption = processor.decode(outputs[0], skip_special_token=True)
     return caption
 
-st.title("Image Captioning with BLiP")
+st.title("Image Captioning with BLiP by Yaqoob Alyani")
 st.write("Upload an image or enter a URL to generate a caption.")
 
 # File uploader for image input (with error handling)
