@@ -1,7 +1,9 @@
 import streamlit as st
 from PIL import Image
 import requests
-import torch torchvision tourchaudio
+import torch 
+import torchvision 
+import tourchaudio
 from transformers import AutoProcessor, BlipForConditionalGeneration
 
 # Function to generate captions
