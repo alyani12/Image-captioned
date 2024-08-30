@@ -1,4 +1,4 @@
+streamlit
+Pillow
+requests
 transformers
-torch
-torchvision
-torchaudio
