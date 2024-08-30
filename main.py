@@ -1,6 +1,7 @@
 import streamlit as st
 from PIL import Image
 import requests
+import torch
 from transformers import AutoProcessor, BlipForConditionalGeneration
 
 # Function to generate captions
@@ -30,7 +31,7 @@ def generate_caption(image=None, image_url=None, model_name="Salesforce/blip-ima
     return caption
 
 # Streamlit app
-st.title("Image Captioning with BLiP by Yaqoob ALyani")
+st.title("Image Captioning with BLiP by Yaqoob Khan ALyani")
 st.write("Upload an image or enter a URL to generate a caption.")
 
 # File uploader for image input
