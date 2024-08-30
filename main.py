@@ -72,4 +72,3 @@ if image_url:
         st.success(f"Caption: {caption}")
     else:
         st.warning("Image not found or caption generation failed.")
-    
