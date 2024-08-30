@@ -23,6 +23,7 @@ def generate_caption(image=None, image_url=None, model_name="Salesforce/blip-ima
         st.error("No image or image URL provided.")
         return None
 
+    # Generate caption
     text = "A picture of"
     inputs = processor(images=image, text=text, return_tensors="pt")
     outputs = model.generate(**inputs)
@@ -30,6 +31,21 @@ def generate_caption(image=None, image_url=None, model_name="Salesforce/blip-ima
     return caption
 
 # Streamlit app
+st.set_page_config(page_title="Image Captioning with BLiP", layout="wide")
+
+# Add a background image to the app
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-image: url('https://images.pexels.com/photos/5685274/pexels-photo-5685274.jpeg');
+        background-size: cover;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("Image Captioning with BLiP by Yaqoob Khan ALyani")
 st.write("Upload an image or enter a URL to generate a caption.")
 
