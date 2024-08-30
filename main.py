@@ -7,7 +7,6 @@ from transformers import AutoProcessor, BlipForConditionalGeneration
 # Function to generate captions
 def generate_caption(image=None, image_url=None, model_name="Salesforce/blip-image-captioning-base"):
     """Generates a caption using BLiP for a given image or image URL."""
-
     processor = AutoProcessor.from_pretrained(model_name)
     model = BlipForConditionalGeneration.from_pretrained(model_name)
 
