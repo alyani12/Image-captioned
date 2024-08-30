@@ -3,30 +3,37 @@ from PIL import Image
 import requests
 from transformers import AutoProcessor, BlipForConditionalGeneration
 
-def generate_caption(image_url, model_name="Salesforce/blip-image-captioning-base"):
-    """Fetches an image, generates a caption using BLiP, and returns the caption."""
+# Function to generate captions
+def generate_caption(image=None, image_url=None, model_name="Salesforce/blip-image-captioning-base"):
+    """Generates a caption using BLiP for a given image or image URL."""
 
     processor = AutoProcessor.from_pretrained(model_name)
     model = BlipForConditionalGeneration.from_pretrained(model_name)
 
-    try:
-        response = requests.get(image_url, stream=True)
-        response.raise_for_status()  # Raise an exception for non-200 status codes
-        image = Image.open(response.raw)
-    except requests.exceptions.RequestException as e:
-        st.error(f"Error fetching image: {e}")
+    # Fetch and process image
+    if image_url:
+        try:
+            response = requests.get(image_url, stream=True)
+            response.raise_for_status()  # Raise an exception for non-200 status codes
+            image = Image.open(response.raw)
+        except requests.exceptions.RequestException as e:
+            st.error(f"Error fetching image: {e}")
+            return None
+    elif image is None:
+        st.error("No image or image URL provided.")
         return None
 
     text = "A picture of"
     inputs = processor(images=image, text=text, return_tensors="pt")
     outputs = model.generate(**inputs)
-    caption = processor.decode(outputs[0], skip_special_token=True)
+    caption = processor.decode(outputs[0], skip_special_tokens=True)
     return caption
 
-st.title("Image Captioning with BLiP by Yaqoob Alyani")
+# Streamlit app
+st.title("Image Captioning with BLiP by Yaqoob ALyani")
 st.write("Upload an image or enter a URL to generate a caption.")
 
-# File uploader for image input (with error handling)
+# File uploader for image input
 uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 if uploaded_image is not None:
     try:
@@ -37,7 +44,7 @@ if uploaded_image is not None:
     except Exception as e:
         st.error(f"Error processing image: {e}")
 
-# URL input for image fetching (with error handling)
+# URL input for image fetching
 image_url = st.text_input("Enter image URL (optional)")
 if image_url:
     caption = generate_caption(image_url=image_url)
@@ -45,8 +52,3 @@ if image_url:
         st.success(f"Caption: {caption}")
     else:
         st.warning("Image not found or caption generation failed.")
-
-# Optional: Model selection dropdown
-# st.selectbox("Select Model", ["Salesforce/blip-image-captioning-base", "Another model name"])
-
-# Display any potential errors or warnings from generate_caption()
